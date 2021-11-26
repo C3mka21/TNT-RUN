@@ -20,6 +20,8 @@ private:
     int xa; //расстояние между спрайтами по горизонтали
     int ya; //расстояние между спрайтами по вертикали
 
+    Karta* karta;
+
     //команды для персонажа
     int v; //скорость персонажа
     char d; //стрелка в сторону которого двигаеться персонаж ->
@@ -31,7 +33,7 @@ private:
     int pers[8][8];
 public:
     Person():
-    photo(txLoadImage("fnafb.bmp")),x(320),y(400),x1(41),y1(6),width(134),height(197),scalex(0.3),scaley(0.3),color(TX_BLACK),xa(70),ya(8),v(5),d(VK_RIGHT),a(VK_LEFT),w(VK_UP),s(VK_DOWN)
+    photo(txLoadImage("fnafb.bmp")),x(0),y(400),x1(41),y1(6),width(134),height(197),scalex(0.3),scaley(0.3),color(TX_BLACK),xa(70),ya(8),v(5),d(VK_RIGHT),a(VK_LEFT),w(VK_UP),s(VK_DOWN)
     {
         if(!photo)
         {
@@ -39,11 +41,19 @@ public:
             exit(0);
         }
     }
+
     ~Person()
     {
         txDeleteDC(photo);
     }
-
+    void init_karta(Karta* a)
+    {
+        karta=a;
+    }
+    void norm_x(int a,double b)
+    {
+        x=a*7*b;
+    }
     void draw() //функция отрисовки
     {
         Win32::TransparentBlt (txDC(), x, y, width*scalex, height*scaley, photo, x1, y1, width, height, color);

@@ -20,12 +20,12 @@ private:
     int sty;
     int n;
     int m;
-    int ground [8][8];
-public:
     int height; //13
     int width;  //17
     double scalex;
     double scaley;
+    int ground [8][8];
+public:
     Karta():
     photo(txLoadImage("karta.bmp")),color(TX_WHITE),height(312),width(308),scalex(0.2),scaley(0.2),x(0),y(0),x1(657),y1(656),type(0),stx(x),sty(y),n(8),m(8)
     {
@@ -93,7 +93,9 @@ public:
             }
         }
     }
-
+    int get_width() {return width;}
+    double get_scalex() {return scalex;}
+    void set_width(int n1){width=n1;}
 };
 
 #endif
