@@ -7,10 +7,11 @@ int main()
 {
     Karta karta_t;
     Person person_t;
-    txCreateWindow(karta_t.width*8*karta_t.scalex, karta_t.height*8*karta_t.scaley);
+    txCreateWindow(480, 480);
     txSetFillColor(TX_BLACK);
     txClear();
-
+    person_t.norm_x(karta_t.get_width(),karta_t.get_scalex());
+    person_t.init_karta(&karta_t);
     karta_t.init();
     while(!GetAsyncKeyState(VK_ESCAPE))
     {
