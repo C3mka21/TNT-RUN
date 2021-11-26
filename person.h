@@ -4,7 +4,7 @@
 #include "TXLib.h"
 #include "TXRIP.h"
 
-class Person : Karta
+class Person
 {
 private:
     HDC photo; // указатель на загруженную картинку
@@ -78,7 +78,7 @@ public:
         y1=6;
         x1+=width+xa;
         i-=1;
-        y+=20;
+        y+=v;
         if(x1>=570)
         {
             x1=41;
@@ -99,28 +99,21 @@ public:
 
     void update() //отрисовка и обновление положения
     {
-        for (i = 0; i < n; i++)
+        if(GetAsyncKeyState(s) && txGetPixel (x, y+height*scaley) != TX_BLACK)// && // ground[i-1][j]!=3)
         {
-            for(j = 0; j < m; j++)
-            {
-
-                if(GetAsyncKeyState(s) && txGetPixel (x, y+height*scaley) != TX_BLACK && ground[i-1][j]!=3)
-                {
-                    down();
-                }
-                else if(GetAsyncKeyState(d) && txGetPixel (x+width*scalex, y) != TX_BLACK && ground[i][j+1]!=3)
-                {
-                    right();
-                }
-                else if(GetAsyncKeyState(w) && txGetPixel (x, y) != TX_BLACK && ground[i+1][j]!=3)
-                {
-                    up();
-                }
-                else if(GetAsyncKeyState(a) && txGetPixel (x, y) != TX_BLACK && ground[i][j-1]!=3)
-                {
-                    left();
-                }
-            }
+            down();
+        }
+        else if(GetAsyncKeyState(d) && txGetPixel (x+width*scalex, y) != TX_BLACK) //&& //ground[i][j+1]!=3)
+        {
+            right();
+        }
+        else if(GetAsyncKeyState(w) && txGetPixel (x, y) != TX_BLACK) //&& //ground[i+1][j]!=3)
+        {
+            up();
+        }
+        else if(GetAsyncKeyState(a) && txGetPixel (x, y) != TX_BLACK) //&& ground[i][j-1]!=3)
+        {
+            left();
         }
     }
 };

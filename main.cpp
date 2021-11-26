@@ -5,11 +5,12 @@
 
 int main()
 {
-    txCreateWindow(WINDOWX, WINDOWY);
-    txSetFillColor(TX_BLACK);
-    txClear();
     Karta karta_t;
     Person person_t;
+    txCreateWindow(karta_t.width*8*karta_t.scalex, karta_t.height*8*karta_t.scaley);
+    txSetFillColor(TX_BLACK);
+    txClear();
+
     karta_t.init();
     while(!GetAsyncKeyState(VK_ESCAPE))
     {
@@ -20,4 +21,3 @@ int main()
     }
     return 0;
 }
-

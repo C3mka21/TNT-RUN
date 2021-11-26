@@ -2,18 +2,15 @@
 #define __TXRIP_H__
 
 #include "TXLib.h"
-#define WINDOWX 1250
-#define WINDOWY 700
+#define WINDOWX 197*8
+#define WINDOWY
 
 class Karta
 {
 private:
     HDC photo;
     COLORREF color;
-    int height; //13
-    int width;  //17
-    double scalex;
-    double scaley;
+
     int x;
     int y;
     int x1;
@@ -21,13 +18,16 @@ private:
     int type;
     int stx;
     int sty;
-public:
     int n;
     int m;
     int ground [8][8];
-
+public:
+    int height; //13
+    int width;  //17
+    double scalex;
+    double scaley;
     Karta():
-    photo(txLoadImage("karta.bmp")),color(TX_WHITE),height(312),width(308),scalex(0.2),scaley(0.2),x(100),y(100),x1(657),y1(656),type(0),stx(x),sty(y),n(8),m(8)
+    photo(txLoadImage("karta.bmp")),color(TX_WHITE),height(312),width(308),scalex(0.2),scaley(0.2),x(0),y(0),x1(657),y1(656),type(0),stx(x),sty(y),n(8),m(8)
     {
         if(!photo)
         {
@@ -70,7 +70,8 @@ public:
                 y=y+height*scaley;
             for(int j = 0; j < m; j++)
             {
-                x=x+width*scalex;
+                if(j>=1)
+                    x=x+width*scalex;
                 if(ground[i][j]==2){
                     Win32::TransparentBlt (txDC(), x, y , width*scalex, height*scaley, photo, x1, y1, width, height, color);
                 }
@@ -92,6 +93,7 @@ public:
             }
         }
     }
+
 };
 
 #endif
