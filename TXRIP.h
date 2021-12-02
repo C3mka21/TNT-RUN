@@ -1,91 +1,103 @@
 #ifndef __TXRIP_H__
 #define __TXRIP_H__
 
-#include "TXLib.h"
-#define WINDOWX 197*8
-#define WINDOWY
+#define WINDOWX 480
+#define WINDOWY 480
 
-class Karta
+#include "TXLib.h" //подключение библиотеки
+
+
+
+class Karta //создание класса
 {
 private:
-    HDC photo;
-    COLORREF color;
+    HDC photo; // указатель на загруженную картинку
+    COLORREF color; // цвет
 
-    int x;
-    int y;
-    int x1;
-    int y1;
-    int type;
-    int stx;
-    int sty;
-    int n;
-    int m;
-    int height; //13
-    int width;  //17
-    double scalex;
-    double scaley;
-    int ground [8][8];
+    int x; //положение загруженной картинки на холсте по оси ох
+    int y; //положение загруженной картинки на холсте по оси оу
+    int x1; //положение левого верхнего угла прямоугольника копируемой области по оси ох
+    int y1; //положение левого верхнего угла прямоугольника копируемой области по оси оу
+    int stx; //стартовое положения картинки по оси ох
+    int sty; //стартовое положения картинки по оси оу
+    int n; //количество столбцов в массиве
+    int m; //количество строк в массиве
+    int height; //высота копируемой области с картинки
+    int width; //ширина копируемой области с картинки
+
+    double scalex; //переменная позволяющая изменять размер картинки на холсте по оси ох
+    double scaley; //переменная позволяющая изменять размер картинки на холсте по оси оу
+
+    int ground[10][10]; //массив карты лежащий в karta.txt
 public:
-    Karta():
-    photo(txLoadImage("karta.bmp")),color(TX_WHITE),height(312),width(308),scalex(0.2),scaley(0.2),x(0),y(0),x1(657),y1(656),type(0),stx(x),sty(y),n(8),m(8)
+    Karta(): //конструктор класса
+    photo(txLoadImage("karta.bmp")),color(TX_WHITE),height(312),width(308),scalex(0.2),scaley(0.2),x(-308*0.2),y(-312*0.2),x1(657),y1(656),stx(x),sty(y),n(10),m(10)
     {
-        if(!photo)
+        if(!photo) //проверка на наличие файла со српайтом
         {
-            txMessageBox("Не найден файл с картой","Ошибка #2");
+            txMessageBox("Не найден файл со спрайтами карты","Ошибка #2");
             exit(0);
         }
     }
 
-    ~Karta()
+    ~Karta() //деструктор класса
     {
-        txDeleteDC(photo);
+        txDeleteDC(photo); //удаление картинки из памяти
     }
 
-    int init()
+    int init() //инициализация карты
     {
         FILE* f;
-        f = fopen("karta.txt", "r");
-        if (f==NULL)
+        f = fopen("karta.txt", "r"); //открытие файла karta.txt
+        if (f==NULL) //проверка на наличие файлы с матрицей
         {
-            txMessageBox("Не найден файл с матрицей","Ошибка #1");
+            txMessageBox("Не найден файл с картой","Ошибка #1");
             return 1;
         }
-        fscanf(f, "%d%d\n",&n,&m );
+        fscanf(f, "%d%d\n",&n,&m ); //считывание кол-во столбцов и строк в массиве
         for (int i = 0; i < n; i++)
         {
             for(int j = 0; j < m; j++)
             {
-                fscanf(f, "%d", &ground[i][j]);
+                fscanf(f, "%d", &ground[i][j]); //считывание самого массива
             }
         }
-        fclose(f);
+        fclose(f); //закрытие файла
+
         return 0;
     }
 
-    void draw()
+    void draw() //отрисовка карты
     {
         for (int i = 0; i < n; i++)
         {
-            if(i>=1)
-                y=y+height*scaley;
+            if(i>=1) //переход на следующую строчку в массиве
+                y=y+height*scaley;  //смещение положения одного квадратика карты по оу
             for(int j = 0; j < m; j++)
             {
-                if(j>=1)
-                    x=x+width*scalex;
-                if(ground[i][j]==2){
-                    Win32::TransparentBlt (txDC(), x, y , width*scalex, height*scaley, photo, x1, y1, width, height, color);
+                if(j>=1) //переход на следующий столбец в массиве
+                    x=x+width*scalex; //смещение положения одного квадратика карты по ох
+                if(ground[i][j]==2) //проверка на наличие числа в ячейке и отрисовка определенного квадратика
+                {
+                    Win32::TransparentBlt (txDC(), x, y , width*scalex, height*scaley, photo, x1, y1, width, height, color); //рисование
                 }
-                else if(ground[i][j]==1){
-                    Win32::TransparentBlt (txDC(), x, y, width*scalex, height*scaley, photo, 3, 985 , width, height, color);
+                else if(ground[i][j]==1) //проверка на наличие числа в ячейке и отрисовка определенного квадратика
+                {
+                    Win32::TransparentBlt (txDC(), x, y, width*scalex, height*scaley, photo, 3, 985 , width, height, color); //рисование
                 }
-                else if(ground[i][j]==3){
-                    Win32::TransparentBlt (txDC(), x, y, width*scalex, height*scaley, photo, 990, 985 , width, height, color);
+                else if(ground[i][j]==3) //проверка на наличие числа в ячейке и отрисовка определенного квадратика
+                {
+                    Win32::TransparentBlt (txDC(), x, y, width*scalex, height*scaley, photo, 990, 985 , width, height, color); //рисование
                 }
-                if(j==m-1)
+                else if(ground[i][j]==4) //проверка на наличие числа в ячейке и отрисовка определенного квадратика
+                {
+                    Win32::TransparentBlt (txDC(), x, y, width*scalex, height*scaley, photo, 983, 654 , width, height, color); //рисование
+                }
+                if(j==m-1) //проверка на конец строки
                 {
                     x=stx;
                 }
-                if(i==n-1&&j==m-1)
+                if(i==n-1 && j==m-1) //проверка на конец столбца
                 {
                     y=sty;
 
@@ -93,9 +105,17 @@ public:
             }
         }
     }
-    int get_width() {return width;}
-    double get_scalex() {return scalex;}
-    void set_width(int n1){width=n1;}
+
+    int get_height() {return height;} //функция геттер для использования в другом .h файле высоты коопируемой области
+
+    int get_width() {return width;} //функция геттер для использования в другом .h файле ширины коопируемой области
+
+    double get_scalex() {return scalex;} //функция геттер для изменения ширины на копируемой области на холсте
+
+    int (*getter())[10] //функция геттер для передачи данныйх массива в другой .h файл
+    {
+        return ground;
+    }
 };
 
 #endif
