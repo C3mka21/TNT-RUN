@@ -6,7 +6,7 @@
 
 int main()
 {
-    txCreateWindow(WINDOWX, WINDOWY); //создание окна
+    txCreateWindow(WINDOWXч, WINDOWY); //создание окна
     txSetFillColor(TX_BLACK); //выбор цвета
     txClear(); //заливка все экрана
     Karta karta; //
@@ -23,7 +23,6 @@ int main()
 
         txSleep(150); //задержка перед выполением цикла
         txClear();
-
     }
     return 0;
 }

@@ -108,10 +108,8 @@ public:
     int get_width() {return width;} //функция геттер для использования в другом .h файле ширины коопируемой области
 
     double get_scalex() {return scalex;} //функция геттер для изменения ширины на копируемой области на холсте
-
     int get_x() {return x;}
-
-    int get_y() {return y;}
+    int get
 };
 
 #endif
