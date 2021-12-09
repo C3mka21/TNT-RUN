@@ -1,8 +1,8 @@
 #ifndef __TXRIP_H__
 #define __TXRIP_H__
 
-#define WINDOWX 1000
-#define WINDOWY 600
+#define WINDOWX 795
+#define WINDOWY 800
 
 #include "TXLib.h" //подключение библиотеки
 
@@ -28,10 +28,10 @@ private:
     double scalex; //переменная позволяющая изменять размер картинки на холсте по оси ох
     double scaley; //переменная позволяющая изменять размер картинки на холсте по оси оу
 
-    int ground[10][10]; //массив карты лежащий в karta.txt
+    int ground[15][15]; //массив карты лежащий в karta.txt
 public:
     Karta(): //конструктор класса
-    photo(txLoadImage("karta.bmp")),color(TX_WHITE),height(312),width(308),scalex(0.2),scaley(0.2),x(50),y(-312*0.2),x1(657),y1(656),stx(x),sty(y),n(10),m(10)
+    photo(txLoadImage("karta.bmp")),color(TX_WHITE),height(312),width(308),scalex(0.2),scaley(0.2),x(-60),y(-312*0.2),x1(657),y1(656),stx(x),sty(y),n(10),m(10)
     {
         if(!photo) //проверка на наличие файла со српайтом
         {
@@ -78,15 +78,15 @@ public:
             {
                 if(j>=1) //переход на следующий столбец в массиве
                     x=x+width*scalex; //смещение положения одного квадратика карты по ох
-                if(ground[i][j]==-2) //проверка на наличие числа в ячейке и отрисовка определенного квадратика
+                if(ground[i][j]==2) //проверка на наличие числа в ячейке и отрисовка определенного квадратика
                 {
                     Win32::TransparentBlt (txDC(), x, y , width*scalex, height*scaley, photo, x1, y1, width, height, color); //рисование
                 }
-                else if(ground[i][j]==-1) //проверка на наличие числа в ячейке и отрисовка определенного квадратика
+                else if(ground[i][j]==1) //проверка на наличие числа в ячейке и отрисовка определенного квадратика
                 {
                     Win32::TransparentBlt (txDC(), x, y, width*scalex, height*scaley, photo, 3, 985 , width, height, color); //рисование
                 }
-                else if(ground[i][j]==-3) //проверка на наличие числа в ячейке и отрисовка определенного квадратика
+                else if(ground[i][j]==3) //проверка на наличие числа в ячейке и отрисовка определенного квадратика
                 {
                     Win32::TransparentBlt (txDC(), x, y, width*scalex, height*scaley, photo, 990, 985 , width, height, color); //рисование
                 }
@@ -112,6 +112,11 @@ public:
     int get_x() {return x;}
 
     int get_y() {return y;}
+
+    int get_ground(int i,int j) {return ground[i][j];}
+
+    void set_ground(int i,int j,int type) {ground[i][j]=type;}
+
 };
 
 #endif

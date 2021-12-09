@@ -38,12 +38,9 @@ private:
     int k;  //положение персонажа в строке на массиве карты
     int n;  //положение персонажа в столбцу на массиве карты
 
-    int pers[10][10];  //массив который принимает данные другого массива
-
-    HDC photo1;
 public:
     Person(): //конструктор
-    photo(txLoadImage("fnafb.bmp")),photo1(txLoadImage("karta.bmp")),x(370),y(370),x1(41),y1(6),width(134),height(197),scalex(0.3),scaley(0.3),color(TX_BLACK),xa(70),ya(8),v(5),d(VK_RIGHT),a(VK_LEFT),w(VK_UP),s(VK_DOWN),n(7),k(7)
+    photo(txLoadImage("fnafb.bmp")),x(265),y(374),x1(41),y1(6),width(134),height(197),scalex(0.3),scaley(0.3),color(TX_BLACK),xa(70),ya(8),v(5),d(VK_RIGHT),a(VK_LEFT),w(VK_UP),s(VK_DOWN),n(7),k(5)
     {
         if(!photo)
         {
@@ -55,7 +52,6 @@ public:
     ~Person() //деструктор
     {
         txDeleteDC(photo); //удаление картинки из памяти
-        txDeleteDC(photo1);
     }
 
     void init_karta(Karta* a) //функция для создания указателя
@@ -113,71 +109,48 @@ public:
 
     }
 
-    void update() //отрисовка и обновление положения
+    void update()
     {
-        if(GetAsyncKeyState(VK_LBUTTON))
-            printf("%d",pers[n-1][k]);
-        if(GetAsyncKeyState(VK_RBUTTON))
-            printf("%d",pers[n+1][k]);
-
-        if(GetAsyncKeyState(s) && pers[n+1][k]<0 && pers[n+1][k]!=-3) //проверка на нажание кнопки и на границы карты
+        if(GetAsyncKeyState(s) && karta->get_ground(n+1,k)!=0 && karta->get_ground(n+1,k)!=3) //проверка на нажание кнопки и на границы карты
         {
-            //Win32::TransparentBlt (txDC(), x, y, karta->get_width()*karta->get_scalex(),karta->get_height()*karta->get_scalex(), photo1, 980, 650, karta->get_width(), karta->get_height(), TX_WHITE); //рисование
             down(karta->get_height(),karta->get_scalex()); //вызов функции для изменение положение
             n+=1; //движение по массиву
+            if(karta->get_ground(n-1,k)!=2)
+                karta->set_ground(n-1,k,3);
 
-            if(pers[n-1][k]!=-2)
-                pers[n-1][k]=-3;
         }
-        else if(GetAsyncKeyState(d) && pers[n][k+1]<0 && pers[n][k+1]!=-3)//проверка на нажание кнопки и на границы карты
+        else if(GetAsyncKeyState(d) && karta->get_ground(n,k+1)!=0 && karta->get_ground(n,k+1)!=3)//проверка на нажание кнопки и на границы карты
         {
-            //Win32::TransparentBlt (txDC(), x, y, karta->get_width()*karta->get_scalex(),karta->get_height()*karta->get_scalex(), photo1, 980, 650, karta->get_width(), karta->get_height(), TX_WHITE); //рисование
+
             right(karta->get_height(),karta->get_scalex());//вызов функции для изменение положение
             k+=1;//движение по массиву
-            if(pers[n][k-1]!=-2)
-                pers[n][k-1]=-3;
+            if(karta->get_ground(n,k-1)!=2)
+                karta->set_ground(n,k-1,3);
         }
-        else if(GetAsyncKeyState(w) && pers[n-1][k]<0 && pers[n-1][k]!=-3)//проверка на нажание кнопки и на границы карты
+        else if(GetAsyncKeyState(w) && karta->get_ground(n-1,k)!=0 && karta->get_ground(n-1,k)!=3)//проверка на нажание кнопки и на границы карты
         {
-            //Win32::TransparentBlt (txDC(), x, y, karta->get_width()*karta->get_scalex(),karta->get_height()*karta->get_scalex(), photo1, 980, 650, karta->get_width(), karta->get_height(), TX_WHITE); //рисование
+
             up(karta->get_height(),karta->get_scalex());//вызов функции для изменение положение
             n-=1;//движение по массиву
-            if(pers[n+1][k]!=-2)
-                pers[n+1][k]=-3;
+            if(karta->get_ground(n+1,k)!=2)
+                karta->set_ground(n+1,k,3);
         }
-        else if(GetAsyncKeyState(a) && pers[n][k-1]<0 && pers[n][k-1]!=-3)//проверка на нажание кнопки и на границы карты
+        else if(GetAsyncKeyState(a) && karta->get_ground(n,k-1)!=0 && karta->get_ground(n,k-1)!=3)//проверка на нажание кнопки и на границы карты
         {
-            //Win32::TransparentBlt (txDC(), x, y, karta->get_width()*karta->get_scalex(),karta->get_height()*karta->get_scalex(), photo1, 980, 650, karta->get_width(), karta->get_height(), TX_WHITE); //рисование
+
             left(karta->get_height(),karta->get_scalex());//вызов функции для изменение положение
             k-=1;//движение по массиву
-            if(pers[n][k+1]!=-2)
-                pers[n][k+1]=-3;
+            if(karta->get_ground(n,k+1)!=2)
+                karta->set_ground(n,k+1,3);
         }
     }
-
-    int init_pers()
+    int check()
     {
-        FILE* f;
-        f = fopen("karta.txt", "r"); //открытие файла karta.txt
-        if (f==NULL) //проверка на наличие файлы с матрицей
+        if(karta->get_ground(n,k+1)==3 && karta->get_ground(n+1,k)==3 && karta->get_ground(n,k-1)==3 && karta->get_ground(n-1,k)==3)
         {
-            txMessageBox("Не найден файл с картой","Ошибка #1");
-            return 1;
+            txMessageBox("БОЖЕ ЧЕЛ, ТЫ ТАКОЙ БОТ, ТЕБЕ НЕКУДА ИДТИM, ЗНАЧИТ ТЫ НУБИК","СЛИВ");
+            exit(0);
         }
-        fscanf(f,"\n");
-        for (int i = 0; i < 10; i++)
-        {
-            for(int j = 0; j < 10; j++)
-            {
-                fscanf(f, "%d", &pers[i][j]); //считывание самого массива
-            }
-            fscanf(f,"\n");
-        }
-        fclose(f); //закрытие файла
-
-        return 0;
     }
-
-
 };
 #endif
