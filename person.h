@@ -38,9 +38,11 @@ private:
     int k;  //положение персонажа в строке на массиве карты
     int n;  //положение персонажа в столбцу на массиве карты
 
+    bool check;
+
 public:
     Person(): //конструктор
-    photo(txLoadImage("fnafb.bmp")),x(265),y(374),x1(41),y1(6),width(134),height(197),scalex(0.3),scaley(0.3),color(TX_BLACK),xa(70),ya(8),v(5),d(VK_RIGHT),a(VK_LEFT),w(VK_UP),s(VK_DOWN),n(7),k(5)
+    photo(txLoadImage("fnafb.bmp")),x(265),y(374),x1(41),y1(6),width(134),height(197),scalex(0.3),scaley(0.3),color(TX_BLACK),xa(70),ya(8),v(5),d(VK_RIGHT),a(VK_LEFT),w(VK_UP),s(VK_DOWN),n(7),k(5),check(true)
     {
         if(!photo)
         {
@@ -144,13 +146,17 @@ public:
                 karta->set_ground(n,k+1,3);
         }
     }
-    int check()
+
+    int checking()
     {
         if(karta->get_ground(n,k+1)==3 && karta->get_ground(n+1,k)==3 && karta->get_ground(n,k-1)==3 && karta->get_ground(n-1,k)==3)
         {
-            txMessageBox("БОЖЕ ЧЕЛ, ТЫ ТАКОЙ БОТ, ТЕБЕ НЕКУДА ИДТИM, ЗНАЧИТ ТЫ НУБИК","СЛИВ");
-            exit(0);
+            txMessageBox("БОЖЕ ЧЕЛ, ТЫ ТАКОЙ БОТ, ТЕБЕ НЕКУДА ИДТИ, ЗНАЧИТ ТЫ НУБИК","СЛИВ");
+            check=false;
         }
     }
+    bool get_check(){return check;}
+
+    void set_check(bool a){check=a;}
 };
 #endif

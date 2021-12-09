@@ -29,9 +29,11 @@ private:
     double scaley; //переменная позволяющая изменять размер картинки на холсте по оси оу
 
     int ground[15][15]; //массив карты лежащий в karta.txt
+
+    char name[11];
 public:
     Karta(): //конструктор класса
-    photo(txLoadImage("karta.bmp")),color(TX_WHITE),height(312),width(308),scalex(0.2),scaley(0.2),x(-60),y(-312*0.2),x1(657),y1(656),stx(x),sty(y),n(10),m(10)
+    photo(txLoadImage("karta.bmp")),color(TX_WHITE),height(312),width(308),scalex(0.2),scaley(0.2),x(-60),y(-312*0.2),x1(657),y1(656),stx(x),sty(y)
     {
         if(!photo) //проверка на наличие файла со српайтом
         {
@@ -48,7 +50,7 @@ public:
     int init() //инициализация карты
     {
         FILE* f;
-        f = fopen("karta.txt", "r"); //открытие файла karta.txt
+        f = fopen("level1.txt", "r"); //открытие файла karta.txt
         if (f==NULL) //проверка на наличие файлы с матрицей
         {
             txMessageBox("Не найден файл с картой","Ошибка #1");
@@ -103,6 +105,29 @@ public:
         }
     }
 
+    int init2() //инициализация карты
+    {
+        FILE* f;
+        f = fopen("level2.txt", "r"); //открытие файла karta.txt
+        if (f==NULL) //проверка на наличие файлы с матрицей
+        {
+            txMessageBox("Не найден файл с картой","Ошибка #1");
+            return 1;
+        }
+        fscanf(f, "%d%d\n",&n,&m ); //считывание кол-во столбцов и строк в массиве
+        for (int i = 0; i < n; i++)
+        {
+            for(int j = 0; j < m; j++)
+            {
+                fscanf(f, "%d", &ground[i][j]); //считывание самого массива
+            }
+            fscanf(f,"\n");
+        }
+        fclose(f); //закрытие файла
+
+        return 0;
+    }
+
     int get_height() {return height;} //функция геттер для использования в другом .h файле высоты коопируемой области
 
     int get_width() {return width;} //функция геттер для использования в другом .h файле ширины коопируемой области
@@ -116,6 +141,8 @@ public:
     int get_ground(int i,int j) {return ground[i][j];}
 
     void set_ground(int i,int j,int type) {ground[i][j]=type;}
+
+
 
 };
 

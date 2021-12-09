@@ -14,18 +14,37 @@ int main()
 
     person.init_karta(&karta); //вызов функции для задачи указателя
     karta.init(); //инициализация карты
+    txMessageBox("УПРАВЛЕНИЕ\n стрелочки","УРОВЕНЬ 1");
 
-    while(!GetAsyncKeyState(VK_ESCAPE)) //цикл
+    while(person.get_check()==true) //уровень 1
     {
         karta.draw(); //отрисовка карты
-        person.draw(); //отрисовка персонажа
+
 
         person.update(); //обновление положения персонажа
-        person.check();
+        person.checking();
+        person.draw(); //отрисовка персонажа
 
-        txSleep(150); //задержка перед выполением цикла
+        txSleep(200); //задержка перед выполением цикла
         txClear();
 
     }
+    person.set_check(true);
+    txMessageBox("ОКЕЙ, ЛЕТС ГОООО","УРОВЕНЬ 2");
+
+    karta.init2(); //инициализация карты
+    while(person.get_check()==true) //уровень 2
+    {
+        karta.draw(); //отрисовка карты
+
+
+        person.update(); //обновление положения персонажа
+        person.checking();
+        person.draw(); //отрисовка персонажа
+
+        txSleep(200); //задержка перед выполением цикла
+        txClear();
+    }
+    txMessageBox("УРААА, ТЫ ПРОИГРАЛ","ЛОШОК");
     return 0;
 }
