@@ -14,7 +14,7 @@ int main()
 
     person.init_karta(&karta); //вызов функции для задачи указателя
     karta.init(); //инициализация карты
-    txMessageBox("УПРАВЛЕНИЕ\n стрелочки","УРОВЕНЬ 1");
+    txMessageBox("УПРАВЛЕНИЕ:\nCтрелочками","УРОВЕНЬ 1");
 
     while(person.get_check()==true) //уровень 1
     {
