@@ -215,9 +215,10 @@ public:
             }
         }
     }
+
     int checking()
     {
-        if((karta->get_ground(n,k+1)==3||(karta->get_ground(n,k+1)==0)) &&( karta->get_ground(n+1,k)==3|| karta->get_ground(n,k+1)==0) && (karta->get_ground(n,k-1)==3||karta->get_ground(n,k-1)==0) && (karta->get_ground(n-1,k)==3||karta->get_ground(n-1,k)==3))
+        if(karta->get_ground(n,k+1)==3 && karta->get_ground(n+1,k)==3 && karta->get_ground(n,k-1)==3 && karta->get_ground(n-1,k)==3)
         {
             check=false;
         }
@@ -239,5 +240,7 @@ public:
 
     int get_c(){return c;}
     int get_z(){return z;}
+    void set_c(int a){c=a;}
+    void set_z(int a){z=a;}
 };
 #endif

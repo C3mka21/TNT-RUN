@@ -14,7 +14,7 @@ int main()
     Person person; //
 
     person.init_karta(&karta); //вызов функции для задачи указателя
-    txMessageBox("ПРИВЕТСВУЕМ ВАС В ИГРЕ TNT-RUN!","ДОБРО ПОЖАЛОВАТЬ")
+    txMessageBox("ПРИВЕТСВУЕМ ВАС В ИГРЕ TNT-RUN!","ДОБРО ПОЖАЛОВАТЬ");
     txMessageBox("Ваша задача двигаться и набирать очки на поле столько, пока не попадёте в тупик.\nПосле чего робот попробует побить ваш рекорд.","Правила");
     txMessageBox("УПРАВЛЕНИЕ\nСтрелочки","Billie Jean");
     txBegin();
@@ -50,11 +50,12 @@ int main()
         srand(time(NULL));
         while(person.get_check()==true) //уровень 2
         {
+            person.update_bot(); //обновление положения персонажа
+            person.checking();
             karta.draw(); //отрисовка карты
 
 
-            person.update_bot(); //обновление положения персонажа
-            person.checking();
+
             person.draw(); //отрисовка персонажа
             b=person.get_z();
             txSleep(200); //задержка перед выполением цикла
@@ -76,8 +77,10 @@ int main()
             else if(GetAsyncKeyState(VK_ESCAPE))
                 return 0;
         }
+        person.set_c(0);
+        person.set_z(0);
     }
-    txMessageBox("Заходите ещё, с уважением, Артём Постников 9 В","Автор игры")
+    txMessageBox("Заходите ещё, с уважением, Артём Постников 9 В","Автор игры");
     txEnd();
     return 0;
 }
