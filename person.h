@@ -2,6 +2,7 @@
 #define __PERSON_H__
 
 #include "TXLib.h" //подключение основной библиотеки
+#include <random>
 
 
 class Person
@@ -37,12 +38,15 @@ private:
 
     int k;  //положение персонажа в строке на массиве карты
     int n;  //положение персонажа в столбцу на массиве карты
-
+    int c;
+    int z;
     bool check;
+
+
 
 public:
     Person(): //конструктор
-    photo(txLoadImage("fnafb.bmp")),x(265),y(374),x1(41),y1(6),width(134),height(197),scalex(0.3),scaley(0.3),color(TX_BLACK),xa(70),ya(8),v(5),d(VK_RIGHT),a(VK_LEFT),w(VK_UP),s(VK_DOWN),n(7),k(5),check(true)
+    photo(txLoadImage("fnafb.bmp")),x(265),y(374),x1(41),y1(6),width(134),height(197),scalex(0.3),scaley(0.3),color(TX_BLACK),xa(70),ya(8),v(5),d(VK_RIGHT),a(VK_LEFT),w(VK_UP),s(VK_DOWN),n(7),k(5),c(0),z(0),check(true)
     {
         if(!photo)
         {
@@ -119,6 +123,8 @@ public:
             n+=1; //движение по массиву
             if(karta->get_ground(n-1,k)!=2)
                 karta->set_ground(n-1,k,3);
+            game_rand();
+            c++;
 
         }
         else if(GetAsyncKeyState(d) && karta->get_ground(n,k+1)!=0 && karta->get_ground(n,k+1)!=3)//проверка на нажание кнопки и на границы карты
@@ -128,6 +134,8 @@ public:
             k+=1;//движение по массиву
             if(karta->get_ground(n,k-1)!=2)
                 karta->set_ground(n,k-1,3);
+            game_rand();
+            c++;
         }
         else if(GetAsyncKeyState(w) && karta->get_ground(n-1,k)!=0 && karta->get_ground(n-1,k)!=3)//проверка на нажание кнопки и на границы карты
         {
@@ -136,6 +144,8 @@ public:
             n-=1;//движение по массиву
             if(karta->get_ground(n+1,k)!=2)
                 karta->set_ground(n+1,k,3);
+            game_rand();
+            c++;
         }
         else if(GetAsyncKeyState(a) && karta->get_ground(n,k-1)!=0 && karta->get_ground(n,k-1)!=3)//проверка на нажание кнопки и на границы карты
         {
@@ -144,19 +154,90 @@ public:
             k-=1;//движение по массиву
             if(karta->get_ground(n,k+1)!=2)
                 karta->set_ground(n,k+1,3);
+            game_rand();
+            c++;
         }
     }
 
+    void update_bot()
+    {
+        int a=rand()%4;
+        if(a==1)
+        {
+            if(karta->get_ground(n+1,k)!=0 && karta->get_ground(n+1,k)!=3) //проверка на нажание кнопки и на границы карты
+            {
+                down(karta->get_height(),karta->get_scalex()); //вызов функции для изменение положение
+                n+=1; //движение по массиву
+                if(karta->get_ground(n-1,k)!=2)
+                    karta->set_ground(n-1,k,3);
+                game_rand();
+                z++;
+
+            }
+        }
+        if(a==2)
+        {
+            if(karta->get_ground(n,k+1)!=0 && karta->get_ground(n,k+1)!=3)//проверка на нажание кнопки и на границы карты
+            {
+
+                right(karta->get_height(),karta->get_scalex());//вызов функции для изменение положение
+                k+=1;//движение по массиву
+                if(karta->get_ground(n,k-1)!=2)
+                    karta->set_ground(n,k-1,3);
+                game_rand();
+                z++;
+            }
+        }
+        if(a==3)
+        {
+            if(karta->get_ground(n-1,k)!=0 && karta->get_ground(n-1,k)!=3)//проверка на нажание кнопки и на границы карты
+            {
+
+                up(karta->get_height(),karta->get_scalex());//вызов функции для изменение положение
+                n-=1;//движение по массиву
+                if(karta->get_ground(n+1,k)!=2)
+                    karta->set_ground(n+1,k,3);
+                game_rand();
+                z++;
+            }
+        }
+        if(a==0)
+        {
+            if(karta->get_ground(n,k-1)!=0 && karta->get_ground(n,k-1)!=3)//проверка на нажание кнопки и на границы карты
+            {
+
+                left(karta->get_height(),karta->get_scalex());//вызов функции для изменение положение
+                k-=1;//движение по массиву
+                if(karta->get_ground(n,k+1)!=2)
+                    karta->set_ground(n,k+1,3);
+                game_rand();
+                z++;
+            }
+        }
+    }
     int checking()
     {
-        if(karta->get_ground(n,k+1)==3 && karta->get_ground(n+1,k)==3 && karta->get_ground(n,k-1)==3 && karta->get_ground(n-1,k)==3)
+        if((karta->get_ground(n,k+1)==3||(karta->get_ground(n,k+1)==0)) &&( karta->get_ground(n+1,k)==3|| karta->get_ground(n,k+1)==0) && (karta->get_ground(n,k-1)==3||karta->get_ground(n,k-1)==0) && (karta->get_ground(n-1,k)==3||karta->get_ground(n-1,k)==3))
         {
-            txMessageBox("БОЖЕ ЧЕЛ, ТЫ ТАКОЙ БОТ, ТЕБЕ НЕКУДА ИДТИ, ЗНАЧИТ ТЫ НУБИК","СЛИВ");
             check=false;
         }
     }
+
     bool get_check(){return check;}
 
     void set_check(bool a){check=a;}
+
+    void game_rand()
+    {
+
+        int a=rand()%13;
+        int b=rand()%13;
+
+        if(karta->get_ground(a,b)==1)
+            karta->set_ground(a,b,3);
+    }
+
+    int get_c(){return c;}
+    int get_z(){return z;}
 };
 #endif
